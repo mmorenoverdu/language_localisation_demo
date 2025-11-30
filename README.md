@@ -1,8 +1,8 @@
-# Language Localisation demo in PsychoPy (local)
+# Language Localisation demo in PsychoPy (local and online!)
 
 You have created a [PsychoPy experiment](https://psychopy.org/index.html). PsychoPy is great because it is **open-source** (free), and therefore easy to exchange with other researchers or your collaborators, reuse, reproduce, etc.
 
-In your experiment, you **present text to the participant** with instructions or other information. You want to present the text **in the participants' most comfortable language**, as this will enhance their comprehension of the task. You have created your experiment in a **single language**, but you might want to use it in **another language** if your new participants' mother tongue is different. Or you might want to share your experiment with a colleague who works with participants who speak in another language. You could translate word-by-word all your text every time a new language is necessary, but this is tedious and prone to errors. The easiest way to make your experiment scalable and robust is to implement a **language localisation**. This demo and template shows you how to implement it when working in the Builder mode of a PsychoPy local experiment.
+In your experiment, you **present text to the participant** with instructions or other information. You want to present the text **in the participants' most comfortable language**, as this will enhance their comprehension of the task. You have created your experiment in a **single language**, but you might want to use it in **another language** if your new participants' mother tongue is different. Or you might want to share your experiment with a colleague who works with participants who speak in another language. You could translate word-by-word all your text every time a new language is necessary, but this is tedious and prone to errors. The easiest way to make your experiment scalable and robust is to implement a **language localisation**. This demo and template shows you how to implement it when working in the Builder mode of a PsychoPy experiment, both local and online.
 
 ## Setup
 
@@ -16,13 +16,14 @@ This demo includes:
 - A PsychoPy experiment file (.psyexp) that contains a template to illustrate the use of a language localisation.
 - A localiser Excel file (`language_localiser.xlsx`) that contains rows for each language and ISO 639 language codes (e.g., English - EN, Spanish - ES, French - FR).
 - A localisation Excel file (`messages.xlsx`) that contains rows for each message to display and columns with ISO codes for each translation (e.g., EN: Hello, ES: Hola, FR: Bonjour)
-- A `language_settings` routine at the beginning of the experiment which loads the messages variable set at the beginning of the experiment, which can be selected manually or through participant input.
+- A `load_language` routine at the beginning of the experiment which loads the languages according to the language localiser.
+- An 'update_messages' routine that follows the previous routine, which updates the messages found in the messages.xlsx based on the selected language. This is done based on the selected language in the dropdown menu in the dialogue box.
 - Builder components that use the `$` syntax to pull the appropriate text based on the current language (e.g., `$welcome_msg`).
 - Example routines demonstrating how to set up this logic with minimal code components.
 
 ## How does it work
 
-The first routine of the experiment must be the language settings routine. This routine has a code component that only runs Python code (i.e., only works locally). The code is divided into two tabs:
+The first routine of the experiment must be the 'load language' routine. This routine has a code component. The code is divided into two tabs:
   - BEGIN EXPERIMENT: the code imports the Excel sheet "messages.xlsx" into PsychoPy, creates a dictionary with the messages and allows the variables to be used directly (as global variables in the experiment's environment). This needs to happen **at the beginning of the experiment** because the components to display text require these variables to exist at that stage; otherwise the experiment will crash, looking for a variable not yet defined. At this point all the messages are set to English (EN) by default. This means you **DO NOT NEED to change the code here**, as it will automatically load the most up-to-date version of the messages Excel sheet. This means **the only thing you need to do is to update the 'messages.xlsx' Excel sheet**.  
   - BEGIN ROUTINE: the code updates the language to be used based on the choice made in the dialogue box before the first screen of the experiment actually appears. Because the language settings routine is the first routine of the experiment, this code will **automatically** update all the messages to match the language code as used in the language localiser Excel sheet. Again, this means you **DO NOT NEED to change the code here** to add your language, it will do it automatically for you.
 
@@ -58,7 +59,7 @@ This demo includes an instructions routine and instructions loop, as well as an 
 
 ## Notes
 
-This demo is intended for **offline (local)** PsychoPy experiments. For **online (Pavlovia)** experiments, localisation requires different handling and JavaScript-compatible code.
+This demo is should work both for **offline (local)** as well as **online (Pavlovia)** experiments. However, localisation requires different handling and JavaScript-compatible code, and future updates may require adjustments.
 
 ## Useful 'tips'
 
