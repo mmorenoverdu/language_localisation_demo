@@ -1,9 +1,9 @@
 ### LANGUAGE LOCALISER DEMO ###
-**Author:** Marcos Moreno Verdu | **Date:** 07/06/2025 | **Last updated PsychoPy version:** 2024.2.3
+**Author:** Marcos Moreno Verdu | **Date:** 07/06/2025 | **Last updated PsychoPy version:** 2025.1.0
 
 This demo is intended to demonstrate how to implement a language localisation in PsychoPy without requiring to add any code.
 
-This demo only works for **LOCAL** experiments, not online experiments. The demo is intended for users working on Builder mode.
+This demo only works for **LOCAL** and **ONLINE** experiments. The demo is intended for users working on Builder mode.
 
 ## Critical considerations ##
 
@@ -17,14 +17,22 @@ All the text components which should be dynamically updated for language should 
 
 # How does it work #
 
-The first routine of the experiment must be the language settings routine. This routine has a code component that only runs Python code (i.e., only works locally). The code is divided into two tabs:
-- BEGIN EXPERIMENT: the code imports the Excel sheet "messages.xlsx" into PsychoPy, creates a dictionary with the messages and allow the variables to be used directly (as global variables in the experiment's environment). This needs to happen **at the beginning of the experiment** because the components to display text require these variables to exist at that stage; otherwise the experiment will crash, looking for a variable not yet defined. At this point all the messages are set to English (EN) by default. This means you **DO NOT NEED to change the code here**, as it will automatically load the most up-to-date version of the messages Excel sheet. This means **the only thing you need to do is to update the 'messages.xlsx' Excel sheet**.  
-- BEGIN ROUTINE: the code updates the language to be used based on the choice made in the dialogue box before the first screen of the experiment actually appears. Because the language settings routine is the first routine of the experiment, this code will **automatically** update all the messages to match the language code as used in the language localiser Excel sheet. Again, this means you **DO NOT NEED to change the code here** to add your language, it will do it automatically for you.
-
-The language settings routine is wrapped in a loop that only runs 1 time, and whose conditions file is the language localiser Excel sheet. This allows to import the available languages by just updating the Excel sheet, without requiring to type any code. The number of rows in the localiser Excel sheet **should match** with the number of conditions that PsychoPy identifies in the loop. If not, click on the loop name and **refresh the Excel sheet by clicking on the green arrows**.
-
+The first routine of the experiment must be the 'load language' routine. This routine is wrapped in a loop with the same name. This routine only has a code component. The code autotranslates to JS and is divided into two tabs:
+  - BEGIN EXPERIMENT: the code creates a variable with the ISO code to be used and sets its default value to english (EN).
+  - BEGIN ROUTINE: the code updates the ISO code based on the participant's choice in the dialogue box. 
+
+Note: the "language_localiser.xlsx" containing all available languages is automatically imported by PsychoPy because it is used as conditions file in the loop. The number of rows in the localiser Excel sheet **should match** with the number of conditions that PsychoPy identifies in the loop. If not, click on the loop name and **refresh the Excel sheet by clicking on the green arrows**.
+ 
+The second routine must be the 'update messages' routine. This routine is wrapped in a loop with the same name. The routine only has a code component. The code DOES NOT autotranslate to JS and is only located in the BEGIN ROUTINE tab:
+  - Creates variables to iterate across the "messages.xlsx".
+  - Iterates across the list of messages and updates the values according to the updated language code (updated in the 'load language' routine).
+  - Adds all messages as global variables, using the "globals()" method in Python and the "window[]" mehtod in JS.
+  - Now all messages are updated according to the language and ready to be used for text presentation!
+
+Note: the "messages.xlsx" containing all messages and their translations to the available languages is automatically imported by PsychoPy because it is used as conditions file in the loop.
+
 Every text component in the experiment has a variable name in their "Text" field (e.g., "welcome_msg" for the welcome_text component). This variable will be **automatically** updated based on the language choice in the dialogue box. The variable name **MUST BE an existing message as defined in 'messages.xlsx'** before the experiment is launched.
-
+
 # Adding a new language #
 
 If you just want to add a new language without any further modifications (i.e., you do not want to provide other messages than the ones already used), you just need to modify 3 things:
